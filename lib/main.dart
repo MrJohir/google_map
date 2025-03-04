@@ -18,5 +18,3 @@ class _GoogleMapsState extends State<GoogleMaps> {
     return MaterialApp(debugShowCheckedModeBanner: false, home: GoogleMapScreen());
   }
 }
-
-
