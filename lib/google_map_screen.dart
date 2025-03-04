@@ -110,8 +110,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             myLocationButtonEnabled: true,
             myLocationEnabled: true,
             trafficEnabled: true,
-            zoomControlsEnabled: true,
+            zoomControlsEnabled: false,
+            zoomGesturesEnabled: true,
             compassEnabled: true,
+            mapToolbarEnabled: true,
             initialCameraPosition: CameraPosition(
               target: LatLng(23.819402364100583, 90.40612634271383),
               zoom: 16,
@@ -144,11 +146,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                     ),
                     color: Colors.white,
                     child: Row(
-                       mainAxisAlignment: MainAxisAlignment.center,
+                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
+                        SizedBox(width: 3,),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [Icon(Icons.location_on)],
+                          children: [Icon(Icons.location_on,size: 32,color: Colors.teal,)],
                         ),
                         SizedBox(width: 24),
                         Column(
@@ -158,13 +161,14 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                         SizedBox(width: 90),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [Icon(Icons.mic)],
+                          children: [Icon(Icons.mic,size: 28,)],
                         ),
-                        SizedBox(width: 28),
+                        SizedBox(width: 8),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [CircleAvatar()],
                         ),
+                        SizedBox(width: 3,),
                       ],
                     ),
                   ),
@@ -183,7 +187,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                     onPressed: () {
                       _currentMyLocation();
                     },
-                    child: Icon(Icons.my_location, color: Colors.black),
+                    child: Icon(Icons.gps_not_fixed, color: Colors.black),
                     backgroundColor: Colors.white,
                   ),
                   SizedBox(width: 16),
