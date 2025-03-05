@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 
@@ -24,22 +25,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   late final GoogleMapController _mapController;
   int _selectedIndex = 0;
   LatLng _currentLocation = LatLng(0.0, 0.0);
+  LatLng? _searchLocation;
   final Set<Marker> _markers = <Marker>{};
+  final Set<Polyline> _polyLine = <Polyline>{};
 
-  final Set<Polyline> _polyLine = <Polyline>{
-    Polyline(
-      polylineId: PolylineId('my-home'),
-      points: [
-        LatLng(23.821477296806954, 90.40332645177841),
-        LatLng(23.81758044461688, 90.40547255426645),
-      ],
-      color: Colors.deepPurple,
-      width: 3,
-      startCap: Cap.roundCap,
-      endCap: Cap.roundCap,
-      jointType: JointType.round,
-    ),
-  };
   final Set<Circle> _circle = <Circle>{
     Circle(
       circleId: CircleId('most-effected'),
@@ -88,9 +77,16 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             onMapCreated: (GoogleMapController controller) {
               _mapController = controller;
             },
-            markers: _markers,
-            onTap: _addMarker,
+            markers: {
+              if (_searchLocation != null)
+                Marker(
+                  markerId: MarkerId('search location'),
+                  position: _searchLocation!,
+                  infoWindow: InfoWindow(title: 'search location'),
+                ),
+            },
             polylines: _polyLine,
+            onTap: _addMarker,
             circles: _circle,
             polygons: _polygon,
           ),
@@ -127,6 +123,20 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                         fontSize: 24,
                       ),
                     ),
+                    countries: ['bd'],
+                    isLatLngRequired: true,
+                    getPlaceDetailWithLatLng: (Prediction prediction) {
+                      setState(() {
+                        _searchLocation = LatLng(
+                          double.parse(prediction.lat!),
+                          double.parse(prediction.lng!),
+                        );
+                        _drawPolyLine();
+                      });
+                    },
+                    itemClick: (Prediction prediction) {
+                      _searchController.text = prediction.description ?? '';
+                    },
                   ),
                 ],
               ),
@@ -212,5 +222,22 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     setState(() {
       _markers.add(marker);
     });
+  }
+
+  void _drawPolyLine() {
+    if (_searchLocation != null) {
+      final polyline = Polyline(
+        polylineId: PolylineId('route'),
+        points: [_currentLocation, _searchLocation!],
+        color: Colors.redAccent,
+        width: 3,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        jointType: JointType.round,
+      );
+      setState(() {
+        _polyLine.add(polyline);
+      });
+    }
   }
 }
