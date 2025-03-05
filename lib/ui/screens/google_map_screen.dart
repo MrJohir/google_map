@@ -15,7 +15,6 @@ class GoogleMapScreen extends StatefulWidget {
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getUserLocation();
   }
@@ -23,38 +22,11 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   final TextEditingController _searchController = TextEditingController();
   final String _googleKey = "AIzaSyC-Uu7Kic0MsR77V1SB_SHhfzHLxCmEZ24";
   late final GoogleMapController _mapController;
+  final Set<Marker> _markers = <Marker>{};
+  final Set<Polyline> _polyLine = <Polyline>{};
   int _selectedIndex = 0;
   LatLng _currentLocation = LatLng(0.0, 0.0);
   LatLng? _searchLocation;
-  final Set<Marker> _markers = <Marker>{};
-  final Set<Polyline> _polyLine = <Polyline>{};
-
-  final Set<Circle> _circle = <Circle>{
-    Circle(
-      circleId: CircleId('most-effected'),
-      center: LatLng(23.81758044461688, 90.40547255426645),
-      radius: 220,
-      strokeColor: Colors.red,
-      strokeWidth: 3,
-      fillColor: Colors.red.withOpacity(0.3),
-      onTap: () {},
-    ),
-  };
-  final Set<Polygon> _polygon = <Polygon>{
-    Polygon(
-      polygonId: PolygonId('random-polygon'),
-      points: [
-        LatLng(23.824560036526748, 90.40813263505697),
-        LatLng(23.824883917773697, 90.40445230901241),
-        LatLng(23.82202784618373, 90.40645893663168),
-        LatLng(23.822842470948814, 90.4087870940566),
-      ],
-      fillColor: Colors.orange.withOpacity(0.3),
-      strokeWidth: 3,
-      strokeColor: Colors.orange,
-      onTap: () {},
-    ),
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +59,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             },
             polylines: _polyLine,
             onTap: _addMarker,
-            circles: _circle,
-            polygons: _polygon,
           ),
           Positioned(
             top: 40,
