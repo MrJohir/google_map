@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_map/ui/screens/google_map_screen.dart';
+import 'package:google_map/ui/screens/main_bottom_nav_screen.dart';
 
 class GoogleMaps extends StatelessWidget {
   const GoogleMaps({super.key});
@@ -8,7 +8,7 @@ class GoogleMaps extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: GoogleMapScreen(),
+      home: MainBottomNavScreen(),
     );
   }
 }
